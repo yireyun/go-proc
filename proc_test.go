@@ -2,6 +2,7 @@
 package proc
 
 import (
+	"sync"
 	"testing"
 )
 
@@ -23,6 +24,22 @@ func BenchmarkProcParallel(b *testing.B) {
 		for pb.Next() {
 			ProcPin()
 			ProcUnpin()
+		}
+	})
+}
+
+func BenchmarkProcSync(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		sync.ProcPin()
+		sync.ProcUnpin()
+	}
+}
+
+func BenchmarkProcSyncParallel(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			sync.ProcPin()
+			sync.ProcUnpin()
 		}
 	})
 }
