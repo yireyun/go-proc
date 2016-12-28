@@ -2,6 +2,7 @@
 package proc
 
 import (
+	"runtime"
 	"sync"
 	"testing"
 )
@@ -40,6 +41,27 @@ func BenchmarkProcSyncParallel(b *testing.B) {
 		for pb.Next() {
 			sync.ProcPin()
 			sync.ProcUnpin()
+		}
+	})
+}
+
+func TestLockThread(t *testing.T) {
+	runtime.LockOSThread()
+	runtime.UnlockOSThread()
+}
+
+func BenchmarkLockThread(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		runtime.LockOSThread()
+		runtime.UnlockOSThread()
+	}
+}
+
+func BenchmarkLockThreadParallel(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			runtime.LockOSThread()
+			runtime.UnlockOSThread()
 		}
 	})
 }
