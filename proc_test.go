@@ -65,3 +65,21 @@ func BenchmarkLockThreadParallel(b *testing.B) {
 		}
 	})
 }
+
+func BenchmarkSemParallel(b *testing.B) {
+	var s uint32 = 8
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			sync.Semacquire(&s)
+			sync.Semrelease(&s)
+		}
+	})
+}
+
+func BenchmarkDoSpin(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			sync.DoSpin()
+		}
+	})
+}

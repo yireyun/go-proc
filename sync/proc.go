@@ -8,3 +8,11 @@ func ProcPin() int {
 func ProcUnpin() {
 	runtime_procUnpin()
 }
+
+func Semacquire(s *uint32) {
+	runtime_Semacquire(s)
+}
+
+func Semrelease(s *uint32) {
+	runtime_Semrelease(s)
+}
